@@ -1,8 +1,8 @@
 package api
 
 import (
+	"audioplay/services"
 	"net/http"
-	"yourpackage/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,4 +33,19 @@ func SearchVideo(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
-// ... autres handlers pour les favoris
+// TODO: Implémentez ces handlers pour les favoris
+func AddAudioFavorite(c *gin.Context) {
+	c.JSON(http.StatusNotImplemented, gin.H{"message": "Not implemented yet"})
+}
+
+func ListAudioFavorites(c *gin.Context) {
+	c.JSON(http.StatusNotImplemented, gin.H{"message": "Not implemented yet"})
+}
+
+func AddVideoFavorite(c *gin.Context) {
+	c.JSON(http.StatusNotImplemented, gin.H{"message": "Not implemented yet"})
+}
+
+func ListVideoFavorites(c *gin.Context) {
+	c.JSON(http.StatusNotImplemented, gin.H{"message": "Not implemented yet"})
+}

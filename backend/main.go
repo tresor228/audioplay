@@ -1,7 +1,7 @@
 package main
 
 import (
-	"yourpackage/api"
+	"audioplay/api"
 
 	"github.com/gin-gonic/gin"
 )
