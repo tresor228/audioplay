@@ -47,8 +47,8 @@ func (ys *YouTubeService) Search(query string) ([]VideoResult, error) {
 }
 
 type VideoResult struct {
-	ID          string `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Thumbnail   string `json:"thumbnail"`
+	ID          string
+	Title       string
+	Description string
+	Thumbnail   string
 }

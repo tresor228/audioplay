@@ -119,14 +119,14 @@ func (as *AudioService) searchSoundCloud(query string) ([]AudioResult, error) {
 	}
 
 	var scTracks []struct {
-		ID       int    `json:"id"`
-		Title    string `json:"title"`
-		Duration int    `json:"duration"`
+		ID       int
+		Title    string
+		Duration int
 		User     struct {
-			Username string `json:"username"`
-		} `json:"user"`
-		ArtworkURL string `json:"artwork_url"`
-		StreamURL  string `json:"stream_url"`
+			Username string
+		}
+		ArtworkURL string
+		StreamURL  string
 	}
 
 	if err := json.Unmarshal(body, &scTracks); err != nil {
@@ -196,15 +196,15 @@ func (as *AudioService) searchJamendo(query string) ([]AudioResult, error) {
 	}
 
 	var jamendoResponse struct {
-		Headers map[string]interface{} `json:"headers"`
+		Headers map[string]interface{}
 		Results []struct {
-			ID       string `json:"id"`
-			Name     string `json:"name"`
-			Duration int    `json:"duration"`
-			Artist   string `json:"artist_name"`
-			Audio    string `json:"audio"`
-			Image    string `json:"image"`
-		} `json:"results"`
+			ID       string
+			Name     string
+			Duration int
+			Artist   string
+			Audio    string
+			Image    string
+		}
 	}
 
 	if err := json.Unmarshal(body, &jamendoResponse); err != nil {

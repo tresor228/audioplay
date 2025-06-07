@@ -18,8 +18,8 @@ func SetupRoutes(router *gin.Engine) {
 	apiGroup.GET("/favorites/video", ListVideoFavorites)
 
 	// Servir les fichiers statiques pour le frontend
-	router.Static("/static", "./frontend")
+	router.Static("/static", "../frontend")
 	router.GET("/", func(c *gin.Context) {
-		c.File("./frontend/index.html")
+		c.File("../frontend/index.html")
 	})
 }

@@ -4,7 +4,377 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AudioVideo World</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <style>
+                * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --bg-primary: #f7fafc;
+            --bg-secondary: #ffffff;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header moderne */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 1rem 1.25rem;
+            border: none;
+            border-radius: 12px;
+            background: rgba(247, 250, 252, 0.8);
+            font-size: 1rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        #searchInput:focus {
+            background: var(--bg-primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        #searchType {
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: rgba(247, 250, 252, 0.8);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 100px;
+        }
+
+        #searchType:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Main content */
+        main {
+            flex: 1;
+            margin-bottom: 6rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .media-item {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .media-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .media-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .media-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            margin-bottom: 1rem;
+        }
+
+        .media-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Lecteur vidéo */
+        #videoPlayerContainer {
+            margin-top: 2rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            background: var(--bg-secondary);
+            padding: 1rem;
+        }
+
+        #videoPlayer {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+        }
+
+        /* Tabs modernes */
+        .tabs {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            max-width: 120px;
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(113, 128, 150, 0.1);
+            color: var(--text-primary);
+        }
+
+        /* Icônes pour les tabs */
+        .tab-btn::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .tab-btn[data-tab="audio"]::before {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>');
+        }
+
+        .tab-btn[data-tab="video"]::before {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>');
+        }
+
+        .tab-btn[data-tab="favorites"]::before {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+        }
+
+        /* États vides */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            header {
+                margin-bottom: 2rem;
+                padding: 1rem 0;
+            }
+
+            .search-container {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            #videoPlayer {
+                height: 250px;
+            }
+
+            .tabs {
+                padding: 0.75rem;
+            }
+
+            .tab-btn {
+                padding: 0.5rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .media-item {
+                padding: 1rem;
+            }
+
+            .thumbnail {
+                height: 150px;
+            }
+        }
+
+        /* Animations d'entrée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .media-item {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .media-item:nth-child(2) { animation-delay: 0.1s; }
+        .media-item:nth-child(3) { animation-delay: 0.2s; }
+        .media-item:nth-child(4) { animation-delay: 0.3s; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -54,6 +424,195 @@
         </footer>
     </div>
     
-    <script src="js/app.js"></script>
+    <script src="js/app.js">
+        document.addEventListener('DOMContentLoaded', function() {
+    // Éléments DOM
+    const elements = {
+        searchInput: document.getElementById('searchInput'),
+        searchType: document.getElementById('searchType'),
+        searchButton: document.getElementById('searchButton'),
+        audioSection: document.getElementById('audioSection'),
+        videoSection: document.getElementById('videoSection'),
+        audioResults: document.getElementById('audioResults'),
+        videoResults: document.getElementById('videoResults'),
+        videoPlayerContainer: document.getElementById('videoPlayerContainer'),
+        videoPlayer: document.getElementById('videoPlayer'),
+        tabButtons: document.querySelectorAll('.tab-btn')
+    };
+
+    // Gestion des onglets
+    function handleTabSwitch(tab) {
+        // Retirer la classe active de tous les boutons
+        elements.tabButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Masquer toutes les sections
+        elements.audioSection.classList.add('hidden');
+        elements.videoSection.classList.add('hidden');
+        elements.videoPlayerContainer.classList.add('hidden');
+
+        // Afficher la section correspondante
+        switch(tab) {
+            case 'audio':
+                elements.audioSection.classList.remove('hidden');
+                break;
+            case 'video':
+                elements.videoSection.classList.remove('hidden');
+                break;
+            case 'favorites':
+                // À implémenter: afficher les favoris
+                break;
+        }
+    }
+
+    // Initialisation des événements
+    function initEventListeners() {
+        // Gestion des onglets
+        elements.tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.getAttribute('data-tab');
+                button.classList.add('active');
+                handleTabSwitch(tab);
+            });
+        });
+
+        // Recherche
+        elements.searchButton.addEventListener('click', performSearch);
+        elements.searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') performSearch();
+        });
+    }
+
+    // Fonction de recherche principale
+    async function performSearch() {
+        const query = elements.searchInput.value.trim();
+        if (!query) return;
+        
+        try {
+            if (elements.searchType.value === 'audio') {
+                await searchAudio(query);
+                handleTabSwitch('audio');
+            } else {
+                await searchVideo(query);
+                handleTabSwitch('video');
+            }
+        } catch (error) {
+            console.error('Search error:', error);
+            showErrorMessage(elements.audioResults, 'Erreur lors de la recherche');
+            showErrorMessage(elements.videoResults, 'Erreur lors de la recherche');
+        }
+    }
+
+    // Recherche audio
+    async function searchAudio(query) {
+        try {
+            const response = await fetch(`/api/v1/search/audio?q=${encodeURIComponent(query)}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            displayAudioResults(data);
+        } catch (error) {
+            console.error('Audio search error:', error);
+            throw error;
+        }
+    }
+
+    // Recherche vidéo
+    async function searchVideo(query) {
+        try {
+            const response = await fetch(`/api/v1/search/video?q=${encodeURIComponent(query)}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            displayVideoResults(data);
+        } catch (error) {
+            console.error('Video search error:', error);
+            throw error;
+        }
+    }
+
+    // Affichage des résultats audio
+    function displayAudioResults(items) {
+        elements.audioResults.innerHTML = '';
+        
+        if (!items || items.length === 0) {
+            showEmptyState(elements.audioResults, 'Aucun résultat trouvé');
+            return;
+        }
+
+        items.forEach(item => {
+            const audioItem = document.createElement('div');
+            audioItem.className = 'audio-item';
+            audioItem.innerHTML = `
+                <img src="${item.thumbnail}" alt="${item.title}" class="thumbnail">
+                <div class="title">${item.title}</div>
+            `;
+            audioItem.addEventListener('click', () => playAudio(item));
+            elements.audioResults.appendChild(audioItem);
+        });
+    }
+
+    // Affichage des résultats vidéo
+    function displayVideoResults(items) {
+        elements.videoResults.innerHTML = '';
+        
+        if (!items || items.length === 0) {
+            showEmptyState(elements.videoResults, 'Aucun résultat trouvé');
+            return;
+        }
+
+        items.forEach(item => {
+            const videoItem = document.createElement('div');
+            videoItem.className = 'video-item';
+            videoItem.innerHTML = `
+                <img src="${item.thumbnail}" alt="${item.title}" class="thumbnail">
+                <div class="title">${item.title}</div>
+            `;
+            videoItem.addEventListener('click', () => playVideo(item.id));
+            elements.videoResults.appendChild(videoItem);
+        });
+    }
+
+    // Lecture audio
+    async function playAudio(audioItem) {
+        try {
+            const response = await fetch(`/api/v1/audio/${audioItem.id}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            const details = await response.json();
+            
+            elements.audioResults.innerHTML = `
+                <div class="audio-player">
+                    <img src="${details.thumbnail}" alt="${details.title}" class="player-thumbnail">
+                    <h3>${details.title}</h3>
+                    <p>${details.artist || ''}</p>
+                    <audio controls autoplay class="audio-element">
+                        <source src="${details.stream_url}" type="audio/mpeg">
+                        Votre navigateur ne supporte pas l'élément audio.
+                    </audio>
+                </div>
+            `;
+        } catch (error) {
+            console.error('Error playing audio:', error);
+            showErrorMessage(elements.audioResults, 'Erreur lors du chargement de l\'audio');
+        }
+    }
+
+    // Lecture vidéo
+    function playVideo(videoId) {
+        elements.videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        elements.videoPlayerContainer.classList.remove('hidden');
+    }
+
+    // Affichage d'un état vide
+    function showEmptyState(container, message) {
+        container.innerHTML = `<div class="empty-state"><h3>${message}</h3></div>`;
+    }
+
+    // Affichage d'un message d'erreur
+    function showErrorMessage(container, message) {
+        container.innerHTML = `<div class="error-state"><h3>${message}</h3></div>`;
+    }
+
+    // Initialisation
+    initEventListeners();
+});
+    </script>
 </body>
 </html>
