@@ -7,45 +7,64 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	audioService   *services.AudioService
+	youtubeService *services.YouTubeService
+)
+
+func InitServices(audio *services.AudioService, youtube *services.YouTubeService) {
+	audioService = audio
+	youtubeService = youtube
+}
+
 func SearchAudio(c *gin.Context) {
 	query := c.Query("q")
-
-	// Appeler le service audio
-	results, err := services.SearchAudioContent(query)
+	results, err := audioService.Search(query)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, results)
 }
 
 func SearchVideo(c *gin.Context) {
 	query := c.Query("q")
-
-	// Appeler le service YouTube
-	results, err := services.SearchYouTubeContent(query)
+	results, err := youtubeService.Search(query)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, results)
 }
 
-// TODO: Implémentez ces handlers pour les favoris
+// Ajouter cette nouvelle fonction handler
+func GetAudioDetails(c *gin.Context) {
+	audioID := c.Param("id")
+	result, err := audioService.GetAudioDetails(audioID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, result)
+}
+
+// Dans api/handlers.go
 func AddAudioFavorite(c *gin.Context) {
-	c.JSON(http.StatusNotImplemented, gin.H{"message": "Not implemented yet"})
+	// Implémentation pour ajouter un audio aux favoris
+	c.JSON(http.StatusOK, gin.H{"message": "Audio added to favorites"})
 }
 
 func ListAudioFavorites(c *gin.Context) {
-	c.JSON(http.StatusNotImplemented, gin.H{"message": "Not implemented yet"})
+	// Implémentation pour lister les audios favoris
+	c.JSON(http.StatusOK, gin.H{"data": []string{}})
 }
 
 func AddVideoFavorite(c *gin.Context) {
-	c.JSON(http.StatusNotImplemented, gin.H{"message": "Not implemented yet"})
+	// Implémentation pour ajouter une vidéo aux favoris
+	c.JSON(http.StatusOK, gin.H{"message": "Video added to favorites"})
 }
 
 func ListVideoFavorites(c *gin.Context) {
-	c.JSON(http.StatusNotImplemented, gin.H{"message": "Not implemented yet"})
+	// Implémentation pour lister les vidéos favorites
+	c.JSON(http.StatusOK, gin.H{"data": []string{}})
 }

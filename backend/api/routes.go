@@ -10,6 +10,7 @@ func SetupRoutes(router *gin.Engine) {
 	apiGroup.GET("/search/audio", SearchAudio)
 	apiGroup.POST("/favorites/audio", AddAudioFavorite)
 	apiGroup.GET("/favorites/audio", ListAudioFavorites)
+	apiGroup.GET("/audio/:id", GetAudioDetails)
 
 	// Routes vidéo
 	apiGroup.GET("/search/video", SearchVideo)

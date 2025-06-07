@@ -2,16 +2,30 @@ package main
 
 import (
 	"audioplay/api"
+	"audioplay/config"
+	"audioplay/services"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	router := gin.Default()
+	// Charger la configuration
+	cfg := config.LoadConfig()
 
-	// Configuration des routes
+	// Initialiser les services
+	audioService := services.NewAudioService(cfg)
+	youtubeService, err := services.NewYouTubeService(cfg)
+	if err != nil {
+		log.Fatalf("Failed to create YouTube service: %v", err)
+	}
+
+	// Injecter les services dans les handlers
+	api.InitServices(audioService, youtubeService)
+
+	router := gin.Default()
 	api.SetupRoutes(router)
 
-	// Démarrer le serveur
+	log.Println("Server running on :8080")
 	router.Run(":8080")
 }

@@ -1,26 +1,29 @@
 package services
 
 import (
+	"audioplay/config"
 	"context"
-	"log"
 
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 )
 
-const API_KEY = "VOTRE_CLE_API_YOUTUBE"
+type YouTubeService struct {
+	service *youtube.Service
+}
 
-func SearchYouTubeContent(query string) ([]VideoResult, error) {
+func NewYouTubeService(cfg *config.Config) (*YouTubeService, error) {
 	ctx := context.Background()
-
-	service, err := youtube.NewService(ctx, option.WithAPIKey(API_KEY))
+	service, err := youtube.NewService(ctx, option.WithAPIKey(cfg.YouTubeAPIKey))
 	if err != nil {
-		log.Printf("Error creating YouTube client: %v", err)
 		return nil, err
 	}
 
-	// Appel à l'API YouTube
-	call := service.Search.List([]string{"id", "snippet"}).
+	return &YouTubeService{service: service}, nil
+}
+
+func (ys *YouTubeService) Search(query string) ([]VideoResult, error) {
+	call := ys.service.Search.List([]string{"id", "snippet"}).
 		Q(query).
 		Type("video").
 		MaxResults(10)
