@@ -13,15 +13,14 @@ func main() {
 	// Charger la configuration
 	cfg := config.LoadConfig()
 
-	// Initialiser les services
-	audioService := services.NewAudioService(cfg)
+	// Initialiser le service YouTube
 	youtubeService, err := services.NewYouTubeService(cfg)
 	if err != nil {
 		log.Fatalf("Failed to create YouTube service: %v", err)
 	}
 
-	// Injecter les services dans les handlers
-	api.InitServices(audioService, youtubeService)
+	// Injecter le service dans les handlers
+	api.InitYouTubeService(youtubeService)
 
 	router := gin.Default()
 	api.SetupRoutes(router)

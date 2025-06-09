@@ -3,6 +3,7 @@ package services
 import (
 	"audioplay/config"
 	"context"
+	"errors"
 
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
@@ -13,6 +14,10 @@ type YouTubeService struct {
 }
 
 func NewYouTubeService(cfg *config.Config) (*YouTubeService, error) {
+	if cfg.YouTubeAPIKey == "" {
+		return nil, errors.New("YouTube API key not configured")
+	}
+
 	ctx := context.Background()
 	service, err := youtube.NewService(ctx, option.WithAPIKey(cfg.YouTubeAPIKey))
 	if err != nil {
@@ -35,11 +40,16 @@ func (ys *YouTubeService) Search(query string) ([]VideoResult, error) {
 
 	var results []VideoResult
 	for _, item := range response.Items {
+		thumbnail := ""
+		if item.Snippet.Thumbnails != nil {
+			thumbnail = item.Snippet.Thumbnails.Default.Url
+		}
+
 		results = append(results, VideoResult{
 			ID:          item.Id.VideoId,
 			Title:       item.Snippet.Title,
 			Description: item.Snippet.Description,
-			Thumbnail:   item.Snippet.Thumbnails.Default.Url,
+			Thumbnail:   thumbnail,
 		})
 	}
 
@@ -47,8 +57,8 @@ func (ys *YouTubeService) Search(query string) ([]VideoResult, error) {
 }
 
 type VideoResult struct {
-	ID          string
-	Title       string
-	Description string
-	Thumbnail   string
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Thumbnail   string `json:"thumbnail"`
 }
