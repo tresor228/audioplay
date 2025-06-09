@@ -3,7 +3,6 @@ package api
 import "github.com/gin-gonic/gin"
 
 func SetupRoutes(router *gin.Engine) {
-	// Groupe pour les routes API
 	apiGroup := router.Group("/api/v1")
 
 	// Routes audio
@@ -16,6 +15,9 @@ func SetupRoutes(router *gin.Engine) {
 	apiGroup.GET("/search/video", SearchVideo)
 	apiGroup.POST("/favorites/video", AddVideoFavorite)
 	apiGroup.GET("/favorites/video", ListVideoFavorites)
+
+	// Nouvelle route pour la lecture
+	apiGroup.POST("/play", PlayMedia)
 
 	// Servir les fichiers statiques pour le frontend
 	router.Static("/static", "../frontend")

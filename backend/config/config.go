@@ -1,3 +1,4 @@
+// backend/config/config.go
 package config
 
 import (
@@ -8,7 +9,9 @@ import (
 )
 
 type Config struct {
-	YouTubeAPIKey string
+	YouTubeAPIKey      string
+	SoundCloudClientID string
+	JamendoClientID    string
 }
 
 func LoadConfig() *Config {
@@ -18,6 +21,8 @@ func LoadConfig() *Config {
 	}
 
 	return &Config{
-		YouTubeAPIKey: os.Getenv("YOUTUBE_API_KEY"),
+		YouTubeAPIKey:      os.Getenv("YOUTUBE_API_KEY"),
+		SoundCloudClientID: os.Getenv("SOUNDCLOUD_CLIENT_ID"),
+		JamendoClientID:    os.Getenv("JAMENDO_CLIENT_ID"),
 	}
 }
